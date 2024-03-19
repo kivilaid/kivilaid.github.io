@@ -1,0 +1,105 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000000; /* Ensure that the body has a default background color */
+    overflow: hidden;
+    position: relative;
+}
+
+#starry-sky {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    background-size: cover;
+    animation: shimmer 2s infinite alternate;
+    z-index: -1;
+    overflow: hidden;
+}
+
+#starry-sky::before, #starry-sky::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.3) 2px, transparent 3px),
+                      radial-gradient(rgba(255, 255, 255, 0.4) 2px, transparent 3px),
+                      radial-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 3px);
+    background-size: 500% 500%, 600% 600%, 700% 700%;
+    opacity: 0.3;
+    animation: appearDisappear 30s infinite, randomPosition 60s infinite;
+}
+
+@keyframes appearDisappear {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes randomPosition {
+    0%, 100% { background-position: 0% 0%, 25% 25%, 50% 50%; }
+    25% { background-position: 50% 50%, 75% 75%, 100% 100%; }
+    50% { background-position: 100% 100%, 125% 125%, 150% 150%; }
+    75% { background-position: 150% 150%, 175% 175%, 200% 200%; }
+    50% { opacity: 1; }
+}
+
+/* Add multiple layers of stars */
+#starry-sky::after {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 2px),
+                      radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 2px),
+                      radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 2px);
+    background-size: 400% 400%, 500% 500%, 600% 600%;
+    animation: appearDisappear 40s infinite, randomPosition 120s infinite;
+}
+
+#starry-sky::before {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1.5px, transparent 2.5px),
+                      radial-gradient(rgba(255, 255, 255, 0.35) 1.5px, transparent 2.5px),
+                      radial-gradient(rgba(255, 255, 255, 0.45) 1.5px, transparent 2.5px);
+    background-size: 300% 300%, 400% 400%, 500% 500%;
+    animation: appearDisappear 35s infinite, randomPosition 90s infinite;
+}
+
+@keyframes shimmer {
+    0% { opacity: 0.9; }
+    100% { opacity: 1; }
+}
+
+
+
+#typewriter {
+    color: #fff;
+    font-size: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.letter {
+    display: inline-block;
+    line-height: 1em;
+}
+
+.cursor {
+    display: inline-block;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { color: transparent; }
+    50% { color: white; }
+}
+
+
+
