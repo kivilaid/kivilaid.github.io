@@ -1,0 +1,443 @@
+<html><head><base href="https://websim.ai" /><title>Ando Kivilaid - Comprehensive Professional Journey</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --accent-color: #333333;
+            --hover-color: #666666;
+            --timeline-color: #4d90fe;
+        }
+    
+        .dark-mode {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #cccccc;
+            --hover-color: #999999;
+            --timeline-color: #6fa8dc;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+    
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    
+        header {
+            padding: 80px 0;
+            text-align: center;
+        }
+    
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+    
+        nav {
+            margin-bottom: 40px;
+        }
+    
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+    
+        nav a:hover {
+            color: var(--hover-color);
+        }
+    
+        section {
+            margin-bottom: 80px;
+        }
+    
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+    
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--timeline-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+    
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+    
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: var(--bg-color);
+            border: 4px solid var(--timeline-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+    
+        .left {
+            left: 0;
+        }
+    
+        .right {
+            left: 50%;
+        }
+    
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--timeline-color);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--timeline-color);
+        }
+    
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--timeline-color);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--timeline-color) transparent transparent;
+        }
+    
+        .right::after {
+            left: -16px;
+        }
+    
+        .content {
+            padding: 20px 30px;
+            background-color: var(--bg-color);
+            position: relative;
+            border-radius: 6px;
+            border: 1px solid var(--accent-color);
+        }
+    
+        .content h3 {
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+    
+        .content p {
+            margin-bottom: 10px;
+        }
+    
+        .content .date {
+            font-style: italic;
+            color: var(--hover-color);
+        }
+    
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+    
+        .skill {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+    
+        #mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+    
+        #mode-toggle:hover {
+            background-color: var(--hover-color);
+        }
+    
+        #mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--bg-color);
+        }
+    </style>
+    </head>
+    <body>
+        <button id="mode-toggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sun">
+                <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="moon" style="display:none;">
+                <path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" />
+            </svg>
+        </button>
+    
+        <div class="container">
+            <header>
+                <h1>Ando Kivilaid</h1>
+                <p>Technology Evangelist, Innovator, and AI Strategist</p>
+                <nav>
+                    <a href="#current-roles">Current Roles</a>
+                    <a href="#past-experiences">Past Experiences</a>
+                    <a href="#affiliations">Affiliations</a>
+                    <a href="#investments">Investments</a>
+                </nav>
+            </header>
+    
+            <main>
+                <section id="current-roles">
+                    <h2>Current Roles</h2>
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Chief AI Officer at Insly</h3>
+                                <p class="date">May 2023 - Present</p>
+                                <p>Leading AI strategy and implementation, driving digital transformation in the insurance industry. Overseeing AI-driven initiatives across underwriting, claims management, risk assessment, and customer service.</p>
+                                <div class="skills">
+                                    <span class="skill">Future Trends</span>
+                                    <span class="skill">Leadership</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Member of Estonian Business Angels Network (EstBAN)</h3>
+                                <p class="date">May 2015 - Present</p>
+                                <p>Active in connecting and educating business angels to increase investment quality for innovative startups.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Founding Member of Eesti Krüptoraha Liit</h3>
+                                <p class="date">2014 - Present</p>
+                                <p>Advancing cryptocurrency understanding and application in Estonia, supporting adoption and development.</p>
+                                <div class="skills">
+                                    <span class="skill">Cryptocurrency</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Advisor at Black Insurance</h3>
+                                <p class="date">Jan 2018 - Present</p>
+                                <p>Advising on the integration of blockchain technology in insurance, revolutionizing risk management and underwriting processes.</p>
+                                <div class="skills">
+                                    <span class="skill">Future Trends</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Associate Partner at Indome OÜ</h3>
+                                <p class="date">Nov 2014 - Present</p>
+                                <p>Providing leading smart home solutions with unique features and affordable prices.</p>
+                                <div class="skills">
+                                    <span class="skill">Leadership</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Founder of Inspool</h3>
+                                <p class="date">Mar 2015 - Present</p>
+                                <p>Changing the insurance industry through peer-to-peer networking and social trust.</p>
+                                <div class="skills">
+                                    <span class="skill">Future Trends</span>
+                                    <span class="skill">Leadership</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="past-experiences">
+                    <h2>Past Experiences</h2>
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Founder and CEO at Warranty Insurance</h3>
+                                <p class="date">Aug 2015 - Jun 2022</p>
+                                <p>Founded and led the largest insurance MGA in its niche in the Baltic region, offering diverse product insurance solutions.</p>
+                                <div class="skills">
+                                    <span class="skill">Future Trends</span>
+                                    <span class="skill">Leadership</span>
+                                    <span class="skill">Executive Management</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Co-Founder of 180 Degrees by Matthias Diether</h3>
+                                <p class="date">Aug 2018 - 2022</p>
+                                <p>Co-founded a Michelin-starred restaurant, one of the first in the Baltic region to receive this prestigious recognition.</p>
+                                <div class="skills">
+                                    <span class="skill">Organizational Leadership</span>
+                                    <span class="skill">Strategic Planning</span>
+                                    <span class="skill">Executive Management</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Seed Investor in Monese</h3>
+                                <p class="date">Feb 2016 - 2020</p>
+                                <p>Early investor in a platform revolutionizing the banking experience for global citizens.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Founder of Swapin (formerly Payster OY)</h3>
+                                <p class="date">Jan 2014 - Dec 2016</p>
+                                <p>Developed ultra-fast payment solutions between Crypto and Banks, enabling Bitcoin transfers and bill payments.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>CEO at Insta Kindlustus AS</h3>
+                                <p class="date">Mar 2015 - Apr 2016</p>
+                                <p>Led an innovative insurance agency.</p>
+                                <div class="skills">
+                                    <span class="skill">Leadership</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Head of Supervisory Board at IIZI GROUP AS</h3>
+                                <p class="date">Jan 2012 - Feb 2015</p>
+                                <p>Led the supervisory board of the most successful insurance broker group in the CEE region.</p>
+                                <div class="skills">
+                                    <span class="skill">Leadership</span>
+                                    <span class="skill">Executive Management</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="affiliations">
+                    <h2>Affiliations and Memberships</h2>
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Partner in eRipple</h3>
+                                <p class="date">Nov 2014 - Present</p>
+                                <p>Connecting ambitious entrepreneurs globally, facilitating valuable connections between startups, mentors, and investors.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Founder of WWW.INSLY.COM</h3>
+                                <p class="date">Dec 2013 - Present</p>
+                                <p>Leading a spin-off from IIZI Group, focusing on innovative insurance software solutions.</p>
+                                <div class="skills">
+                                    <span class="skill">Future Trends</span>
+                                    <span class="skill">Leadership</span>
+                                    <span class="skill">Executive Management</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="investments">
+                    <h2>Investments and Advisory Roles</h2>
+                    <div class="timeline">
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Investor in Somno</h3>
+                                <p class="date">Oct 2015 - Present</p>
+                                <p>Invested in an elegant vacation and leave data management solution for small and medium-sized companies.</p>
+                                <div class="skills">
+                                    <span class="skill">Leadership</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item right">
+                            <div class="content">
+                                <h3>Investor in Nevercode (Greenhouse)</h3>
+                                <p class="date">Nov 2015 - Present</p>
+                                <p>Invested in a productivity tool for mobile app developers, offering continuous integration solutions.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item left">
+                            <div class="content">
+                                <h3>Investor in Upsteem.com LLC</h3>
+                                <p class="date">Aug 2015 - Present</p>
+                                <p>Invested in a talent management software package designed for managers and HR professionals in SMEs.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+    
+            <footer>
+                <p>&copy; 2023 Ando Kivilaid. All rights reserved.</p>
+            </footer>
+        </div>
+    
+        <script>
+            const modeToggle = document.getElementById('mode-toggle');
+            const body = document.body;
+            const sunIcon = document.querySelector('.sun');
+            const moonIcon = document.querySelector('.moon');
+    
+            modeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                if (body.classList.contains('dark-mode')) {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'block';
+                } else {
+                    sunIcon.style.display = 'block';
+                    moonIcon.style.display = 'none';
+                }
+            });
+        </script>
+    </body></html>
