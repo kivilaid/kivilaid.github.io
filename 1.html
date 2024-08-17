@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Gradient Shape with Slow Animation</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+        .background {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .shape {
+            mix-blend-mode: screen;
+        }
+    </style>
+</head>
+<body>
+    <svg class="background" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+        <defs>
+            <radialGradient id="gradient1" cx="50%" cy="50%" r="50%" fx="25%" fy="25%">
+                <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#000000;stop-opacity:0" />
+            </radialGradient>
+            <radialGradient id="gradient2" cx="50%" cy="50%" r="50%" fx="75%" fy="75%">
+                <stop offset="0%" style="stop-color:#4ECDC4;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#000000;stop-opacity:0" />
+            </radialGradient>
+            <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="gooey" />
+            </filter>
+        </defs>
+        <g filter="url(#gooey)">
+            <circle class="shape" cx="50" cy="50" r="0" fill="url(#gradient1)">
+                <animate attributeName="r" values="0;40;0" dur="20s" repeatCount="indefinite" />
+                <animateTransform attributeName="transform" type="translate" values="0,0; 10,-10; 0,0" dur="20s" repeatCount="indefinite" />
+            </circle>
+            <circle class="shape" cx="50" cy="50" r="0" fill="url(#gradient2)">
+                <animate attributeName="r" values="0;35;0" dur="20s" repeatCount="indefinite" begin="10s" />
+                <animateTransform attributeName="transform" type="translate" values="0,0; -10,10; 0,0" dur="20s" repeatCount="indefinite" begin="10s" />
+            </circle>
+        </g>
+    </svg>
+</body>
+</html>
