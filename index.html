@@ -99,11 +99,17 @@
         }
 
         nav .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.05rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
             font-weight: 500;
-            letter-spacing: 0.02em;
-            color: var(--text-primary);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+
+        nav .logo:hover {
+            color: var(--accent);
         }
 
         nav .nav-controls {
@@ -577,7 +583,7 @@
     <div class="cursor-glow"></div>
 
     <nav>
-        <div class="logo">Ando Kivilaid</div>
+        <div class="logo">A · K</div>
         <div class="nav-controls">
             <div class="color-picker-wrap">
                 <div class="color-trigger" id="color-trigger" title="Choose your color"></div>
