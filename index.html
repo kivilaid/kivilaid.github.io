@@ -838,20 +838,35 @@
         const savedHue = localStorage.getItem('hue');
         if (savedHue) setHue(parseInt(savedHue));
 
-        // Language priority: 1) saved preference, 2) browser language, 3) English
+        // Language priority: 1) saved preference, 2) browser language, 3) GeoIP, 4) English
         const savedLang = localStorage.getItem('lang');
         const browserLang = navigator.language || navigator.userLanguage || 'en';
-        const detectedLang = savedLang || (browserLang.startsWith('et') ? 'et' : 'en');
 
-        if (detectedLang === 'et') {
-            currentLang = 'en'; // toggleLang will flip to 'et'
-            toggleLang();
+        function applyLang(lang) {
+            if (lang === 'et' && currentLang === 'en') {
+                toggleLang();
+            } else if (lang === 'en') {
+                document.querySelectorAll('[data-en]').forEach(el => {
+                    const text = el.getAttribute('data-en');
+                    if (text) el.innerHTML = text;
+                });
+            }
+        }
+
+        if (savedLang) {
+            applyLang(savedLang);
+        } else if (browserLang.startsWith('et')) {
+            applyLang('et');
         } else {
-            // Init English
-            document.querySelectorAll('[data-en]').forEach(el => {
-                const text = el.getAttribute('data-en');
-                if (text) el.innerHTML = text;
-            });
+            // Fallback: try GeoIP for Estonian visitors with English browsers
+            fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(2000) })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.country_code === 'EE') applyLang('et');
+                })
+                .catch(() => {}); // fail silently, stay English
+            // Init English immediately (GeoIP is async enhancement)
+            applyLang('en');
         }
     </script>
 </body>
