@@ -324,13 +324,50 @@
             line-height: 1.18;
             margin-bottom: 2rem;
             color: var(--text-primary);
-            animation: fadeSlideUp 1s ease both;
-            animation-delay: 0.4s;
         }
 
         .hero h1 em {
             font-style: italic;
             color: var(--accent);
+        }
+
+        /* Word reveal animation */
+        .word-wrap {
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+            padding-bottom: 0.05em;
+        }
+
+        .word-inner {
+            display: inline-block;
+            transform: translateY(105%);
+            animation: wordReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes wordReveal {
+            to { transform: translateY(0); }
+        }
+
+        /* Shimmer on accent word */
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--accent) 0%,
+                var(--text-primary) 45%,
+                var(--accent) 100%
+            );
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: wordReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
+                       shimmerSweep 2s ease 1.8s both;
+        }
+
+        @keyframes shimmerSweep {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
         }
 
         .hero-description {
@@ -809,7 +846,7 @@
     <!-- ===== HERO ===== -->
     <section class="hero">
         <div class="hero-eyebrow" data-en="AI Strategy · Technology · Building" data-et="AI Strateegia · Tehnoloogia · Ehitamine"></div>
-        <h1 data-en="I build the systems<br>that <em>build</em><br>your business." data-et="Ehitan süsteeme,<br>mis <em>ehitavad</em><br>teie ettevõtte."></h1>
+        <h1 id="hero-title" data-en="I build the systems<br>that <em>build</em><br>your business." data-et="Ehitan süsteeme,<br>mis <em>ehitavad</em><br>teie ettevõtte."></h1>
         <p class="hero-description" data-en="Many consultants leave you with a PowerPoint. I leave you with a working system. Two decades of turning ideas into platforms and startups into market leaders." data-et="Paljud konsultandid jätavad teile PowerPointi. Mina jätan teile töötava süsteemi. Kaks aastakümmet ideede muutmist platvormideks ja idufirmade kasvatamist turuliidriteks."></p>
         <div class="hero-stats">
             <div class="stat">
@@ -1094,6 +1131,36 @@
                 doToggle();
             }
         }
+
+        // ===== HERO TEXT REVEAL =====
+        function animateHeroTitle() {
+            const title = document.getElementById('hero-title');
+            const html = title.innerHTML;
+            // Split by words, preserving <br> and <em> tags
+            let wordIndex = 0;
+            const animated = html.replace(/<br\s*\/?>/gi, '⌊BR⌋').split(/(\s+)/).map(part => {
+                if (part === '⌊BR⌋') return '<br>';
+                if (/^\s+$/.test(part)) return ' ';
+                if (!part.trim()) return part;
+
+                const delay = 0.3 + wordIndex * 0.12;
+                wordIndex++;
+
+                // Check if this word contains <em>
+                const isAccent = part.includes('<em>') || part.includes('</em>');
+                const cleanPart = part;
+                const shimmerClass = isAccent ? ' shimmer' : '';
+
+                return `<span class="word-wrap"><span class="word-inner${shimmerClass}" style="animation-delay:${delay}s">${cleanPart}</span></span>`;
+            }).join('');
+
+            title.innerHTML = animated;
+        }
+
+        animateHeroTitle();
+
+        // Re-animate on language toggle
+        const origToggleLang = toggleLang;
 
         // ===== STAT COUNTER ANIMATION =====
         const statObserver = new IntersectionObserver((entries) => {
