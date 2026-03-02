@@ -565,16 +565,176 @@
             .hero { padding-top: 4rem; }
         }
 
-        /* ===== SCROLL ANIMATIONS ===== */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.9s ease, transform 0.9s ease;
+        /* ===== SCROLL-DRIVEN ANIMATIONS (CSS-only) ===== */
+        @supports (animation-timeline: view()) {
+            .fade-in {
+                opacity: 0;
+                transform: translateY(40px);
+                animation: scrollReveal linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 35%;
+            }
+
+            @keyframes scrollReveal {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Staggered record items */
+            .record-item {
+                opacity: 0;
+                transform: translateX(-30px);
+                animation: slideInRecord linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 30%;
+            }
+
+            @keyframes slideInRecord {
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Service items slide up */
+            .service-item {
+                opacity: 0;
+                transform: translateY(20px);
+                animation: slideUpService linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 40%;
+            }
+
+            @keyframes slideUpService {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Stats count-in effect */
+            .stat {
+                opacity: 0;
+                transform: scale(0.8);
+                animation: popIn linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 40%;
+            }
+
+            @keyframes popIn {
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+
+            /* Dividers grow */
+            .divider {
+                transform: scaleX(0);
+                transform-origin: left;
+                animation: growLine linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 50%;
+            }
+
+            @keyframes growLine {
+                to {
+                    transform: scaleX(1);
+                }
+            }
+
+            /* Photo reveal */
+            .about-photo {
+                opacity: 0;
+                transform: scale(0.85);
+                animation: photoReveal linear both;
+                animation-timeline: view();
+                animation-range: entry 0% entry 35%;
+            }
+
+            @keyframes photoReveal {
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Fallback for browsers without scroll-driven animations */
+        @supports not (animation-timeline: view()) {
+            .fade-in {
+                opacity: 0;
+                transform: translateY(24px);
+                transition: opacity 0.9s ease, transform 0.9s ease;
+            }
+
+            .fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== @starting-style (native enter transitions) ===== */
+        @supports (selector(:popover-open)) {
+            .color-panel {
+                @starting-style {
+                    opacity: 0;
+                    transform: translateY(-12px) scale(0.9);
+                }
+            }
+
+            .service-item:hover {
+                @starting-style {
+                    box-shadow: none;
+                    background: var(--bg-card);
+                }
+            }
+
+            .about-photo:hover {
+                @starting-style {
+                    filter: grayscale(40%);
+                    box-shadow: none;
+                }
+            }
+        }
+
+        /* ===== VIEW TRANSITIONS ===== */
+        @view-transition {
+            navigation: auto;
+        }
+
+        /* Name key elements for view transitions */
+        .hero h1 {
+            view-transition-name: hero-title;
+        }
+
+        .about-photo {
+            view-transition-name: profile-photo;
+        }
+
+        nav .logo {
+            view-transition-name: logo;
+        }
+
+        /* Smooth cross-fade for theme/language toggles */
+        ::view-transition-old(root) {
+            animation: 0.3s ease-out fade-out;
+        }
+
+        ::view-transition-new(root) {
+            animation: 0.3s ease-in fade-in-vt;
+        }
+
+        @keyframes fade-out {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes fade-in-vt {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* ===== SELECTION ===== */
@@ -865,36 +1025,53 @@
             root.style.setProperty('--mouse-y', e.clientY + 'px');
         });
 
-        // ===== LANGUAGE =====
+        // ===== LANGUAGE (with View Transitions) =====
         let currentLang = 'en';
         function toggleLang() {
-            currentLang = currentLang === 'en' ? 'et' : 'en';
-            document.getElementById('lang-toggle').textContent = currentLang === 'en' ? 'ET' : 'EN';
-            root.lang = currentLang;
-            document.querySelectorAll('[data-en]').forEach(el => {
-                const text = el.getAttribute(`data-${currentLang}`);
-                if (text) el.innerHTML = text;
-            });
-            localStorage.setItem('lang', currentLang);
+            const doToggle = () => {
+                currentLang = currentLang === 'en' ? 'et' : 'en';
+                document.getElementById('lang-toggle').textContent = currentLang === 'en' ? 'ET' : 'EN';
+                root.lang = currentLang;
+                document.querySelectorAll('[data-en]').forEach(el => {
+                    const text = el.getAttribute(`data-${currentLang}`);
+                    if (text) el.innerHTML = text;
+                });
+                localStorage.setItem('lang', currentLang);
+            };
+
+            if (document.startViewTransition) {
+                document.startViewTransition(doToggle);
+            } else {
+                doToggle();
+            }
         }
 
-        // ===== THEME =====
+        // ===== THEME (with View Transitions) =====
         function toggleTheme() {
-            const current = root.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', next);
-            document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀' : '☾';
-            localStorage.setItem('theme', next);
+            const doToggle = () => {
+                const current = root.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                document.getElementById('theme-toggle').textContent = next === 'dark' ? '☀' : '☾';
+                localStorage.setItem('theme', next);
+            };
+
+            if (document.startViewTransition) {
+                document.startViewTransition(doToggle);
+            } else {
+                doToggle();
+            }
         }
 
-        // ===== SCROLL ANIMATIONS =====
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
-            });
-        }, { threshold: 0.08 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        // ===== SCROLL ANIMATIONS (JS fallback for browsers without scroll-driven animations) =====
+        if (!CSS.supports('animation-timeline', 'view()')) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.08 });
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }
 
         // ===== RESTORE SAVED PREFERENCES =====
         const savedTheme = localStorage.getItem('theme');
