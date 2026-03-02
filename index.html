@@ -331,26 +331,28 @@
             color: var(--accent);
         }
 
-        /* Word reveal animation */
-        .word-wrap {
+        /* Scramble decode animation */
+        .scramble-char {
             display: inline-block;
-            overflow: hidden;
-            vertical-align: bottom;
-            padding-bottom: 0.05em;
+            min-width: 0.1em;
+            transition: color 0.15s ease;
         }
 
-        .word-inner {
-            display: inline-block;
-            transform: translateY(105%);
-            animation: wordReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        .scramble-char.decoding {
+            color: var(--accent);
         }
 
-        @keyframes wordReveal {
-            to { transform: translateY(0); }
+        .scramble-char.locked {
+            color: var(--text-primary);
         }
 
-        /* Shimmer on accent word */
-        .shimmer {
+        .scramble-char.accent-locked {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        /* Post-decode shimmer */
+        .hero h1.decoded em {
             background: linear-gradient(
                 90deg,
                 var(--accent) 0%,
@@ -361,13 +363,12 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: wordReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both,
-                       shimmerSweep 2s ease 1.8s both;
+            animation: shimmerLoop 4s ease-in-out 0.5s infinite;
         }
 
-        @keyframes shimmerSweep {
-            0% { background-position: 100% 0; }
-            100% { background-position: -100% 0; }
+        @keyframes shimmerLoop {
+            0%, 100% { background-position: 100% 0; }
+            50% { background-position: -100% 0; }
         }
 
         .hero-description {
@@ -1132,35 +1133,88 @@
             }
         }
 
-        // ===== HERO TEXT REVEAL =====
-        function animateHeroTitle() {
+        // ===== HERO TEXT SCRAMBLE DECODE =====
+        function scrambleDecode() {
             const title = document.getElementById('hero-title');
-            const html = title.innerHTML;
-            // Split by words, preserving <br> and <em> tags
-            let wordIndex = 0;
-            const animated = html.replace(/<br\s*\/?>/gi, '⌊BR⌋').split(/(\s+)/).map(part => {
-                if (part === '⌊BR⌋') return '<br>';
-                if (/^\s+$/.test(part)) return ' ';
-                if (!part.trim()) return part;
+            const targetHTML = title.getAttribute(`data-${currentLang}`);
 
-                const delay = 0.3 + wordIndex * 0.12;
-                wordIndex++;
+            // Extract plain text and track tags
+            const segments = [];
+            let inTag = false;
+            let currentTag = '';
+            let isEm = false;
 
-                // Check if this word contains <em>
-                const isAccent = part.includes('<em>') || part.includes('</em>');
-                const cleanPart = part;
-                const shimmerClass = isAccent ? ' shimmer' : '';
+            // Parse into segments: {char, isAccent, isTag, tagContent}
+            for (let i = 0; i < targetHTML.length; i++) {
+                const ch = targetHTML[i];
+                if (ch === '<') {
+                    inTag = true;
+                    currentTag = '<';
+                    continue;
+                }
+                if (inTag) {
+                    currentTag += ch;
+                    if (ch === '>') {
+                        inTag = false;
+                        if (currentTag === '<em>') { isEm = true; segments.push({type: 'tag', content: currentTag}); }
+                        else if (currentTag === '</em>') { isEm = false; segments.push({type: 'tag', content: currentTag}); }
+                        else if (currentTag.startsWith('<br')) { segments.push({type: 'br'}); }
+                        currentTag = '';
+                    }
+                    continue;
+                }
+                segments.push({type: 'char', char: ch, isAccent: isEm});
+            }
 
-                return `<span class="word-wrap"><span class="word-inner${shimmerClass}" style="animation-delay:${delay}s">${cleanPart}</span></span>`;
-            }).join('');
+            const glyphs = '█▓░▒◆◇●○■□▲△◄►♦♠♣◈⬡⬢';
+            const chars = segments.filter(s => s.type === 'char' && s.char !== ' ');
+            const totalChars = chars.length;
+            const lockOrder = chars.map((_, i) => i).sort(() => Math.random() - 0.3); // mostly left-to-right with randomness
 
-            title.innerHTML = animated;
+            // Build initial scrambled HTML
+            let charIdx = 0;
+            function buildHTML(lockedCount) {
+                let html = '';
+                let ci = 0;
+                for (const seg of segments) {
+                    if (seg.type === 'tag') { html += seg.content; continue; }
+                    if (seg.type === 'br') { html += '<br>'; continue; }
+                    if (seg.char === ' ') { html += ' '; continue; }
+
+                    const isLocked = lockOrder.indexOf(ci) < lockedCount;
+                    if (isLocked) {
+                        const cls = seg.isAccent ? 'accent-locked' : 'locked';
+                        html += `<span class="scramble-char ${cls}">${seg.char}</span>`;
+                    } else {
+                        const glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
+                        html += `<span class="scramble-char decoding">${glyph}</span>`;
+                    }
+                    ci++;
+                }
+                return html;
+            }
+
+            // Animation loop
+            let locked = 0;
+            const charsPerFrame = Math.ceil(totalChars / 25); // decode in ~25 frames
+            const frameRate = 50; // ms per frame
+
+            title.innerHTML = buildHTML(0);
+
+            const interval = setInterval(() => {
+                locked += charsPerFrame;
+                if (locked >= totalChars) {
+                    locked = totalChars;
+                    clearInterval(interval);
+                    // Final state with proper tags
+                    title.innerHTML = targetHTML;
+                    title.classList.add('decoded');
+                }
+                title.innerHTML = buildHTML(locked);
+            }, frameRate);
         }
 
-        animateHeroTitle();
-
-        // Re-animate on language toggle
-        const origToggleLang = toggleLang;
+        scrambleDecode();
 
         // ===== STAT COUNTER ANIMATION =====
         const statObserver = new IntersectionObserver((entries) => {
