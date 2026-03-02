@@ -813,19 +813,19 @@
         <p class="hero-description" data-en="Many consultants leave you with a PowerPoint. I leave you with a working system. Two decades of turning ideas into platforms and startups into market leaders." data-et="Paljud konsultandid jätavad teile PowerPointi. Mina jätan teile töötava süsteemi. Kaks aastakümmet ideede muutmist platvormideks ja idufirmade kasvatamist turuliidriteks."></p>
         <div class="hero-stats">
             <div class="stat">
-                <span class="stat-number">20+</span>
+                <span class="stat-number" data-count="20" data-suffix="+">0</span>
                 <span class="stat-label" data-en="Years Experience" data-et="Aastat kogemust"></span>
             </div>
             <div class="stat">
-                <span class="stat-number">€0.5B</span>
+                <span class="stat-number" data-count="0.5" data-prefix="€" data-suffix="B" data-decimals="1">0</span>
                 <span class="stat-label" data-en="Platform Volume" data-et="Platvormi maht"></span>
             </div>
             <div class="stat">
-                <span class="stat-number">60+</span>
+                <span class="stat-number" data-count="60" data-suffix="+">0</span>
                 <span class="stat-label" data-en="Products Launched" data-et="Toodet käivitatud"></span>
             </div>
             <div class="stat">
-                <span class="stat-number">1</span>
+                <span class="stat-number" data-count="1">0</span>
                 <span class="stat-label" data-en="Michelin Star" data-et="Michelin täht"></span>
             </div>
         </div>
@@ -1094,6 +1094,35 @@
                 doToggle();
             }
         }
+
+        // ===== STAT COUNTER ANIMATION =====
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.counted) {
+                    entry.target.dataset.counted = 'true';
+                    const el = entry.target;
+                    const target = parseFloat(el.dataset.count);
+                    const prefix = el.dataset.prefix || '';
+                    const suffix = el.dataset.suffix || '';
+                    const decimals = parseInt(el.dataset.decimals) || 0;
+                    const duration = 1500;
+                    const start = performance.now();
+
+                    function update(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        // Ease out cubic
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        const current = eased * target;
+                        el.textContent = prefix + (decimals ? current.toFixed(decimals) : Math.floor(current)) + suffix;
+                        if (progress < 1) requestAnimationFrame(update);
+                    }
+                    requestAnimationFrame(update);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-number[data-count]').forEach(el => statObserver.observe(el));
 
         // ===== SCROLL ANIMATIONS (JS fallback for browsers without scroll-driven animations) =====
         if (!CSS.supports('animation-timeline', 'view()')) {
