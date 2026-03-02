@@ -303,6 +303,18 @@
             color: var(--accent);
             margin-bottom: 1.5rem;
             font-weight: 500;
+            animation: fadeSlideUp 0.8s ease both;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeSlideRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .hero h1 {
@@ -312,6 +324,8 @@
             line-height: 1.18;
             margin-bottom: 2rem;
             color: var(--text-primary);
+            animation: fadeSlideUp 1s ease both;
+            animation-delay: 0.4s;
         }
 
         .hero h1 em {
@@ -325,12 +339,16 @@
             max-width: 580px;
             line-height: 1.85;
             margin-bottom: 3rem;
+            animation: fadeSlideUp 1s ease both;
+            animation-delay: 0.7s;
         }
 
         .hero-stats {
             display: flex;
             gap: 3rem;
             flex-wrap: wrap;
+            animation: fadeSlideUp 1s ease both;
+            animation-delay: 1s;
         }
 
         .stat { display: flex; flex-direction: column; }
@@ -358,6 +376,12 @@
             background: var(--accent);
             margin: 6rem 0;
             opacity: 0.4;
+            transition: width 0.6s ease, opacity 0.6s ease;
+        }
+
+        .divider:hover {
+            width: 100px;
+            opacity: 0.7;
         }
 
         /* ===== ABOUT ===== */
@@ -470,6 +494,11 @@
             font-size: 1.05rem;
             font-weight: 500;
             margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .record-item:hover .record-content h3 {
+            color: var(--accent);
         }
 
         .record-content .role {
@@ -502,11 +531,14 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.95rem;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.3s ease;
             padding: 0.4rem 0;
         }
 
-        .contact-link:hover { color: var(--accent); }
+        .contact-link:hover {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
 
         .contact-link .link-label {
             font-size: 0.65rem;
